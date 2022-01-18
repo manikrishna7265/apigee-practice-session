@@ -1,0 +1,49 @@
+OAUTH 2.0
+
+->create developer account 
+->create api product
+->create app and add api product
+          ->to generate use3r name and password for basic authentication
+
+->create proxy to generate key -> preflow -> add OAUTH
+
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<OAuthV2 continueOnError="false" enabled="true" name="OAuth-v20-1">
+    <DisplayName>OAuth v2.0-1</DisplayName>
+    <Properties/>
+    <Attributes/>
+    <Operation>GenerateAccessToken</Operation>
+    <!-- This is in millseconds, so expire in an hour -->
+    <ExpiresIn>1800000</ExpiresIn>
+    <SupportedGrantTypes>
+        <GrantType>client_credentials</GrantType>
+    </SupportedGrantTypes>
+    <GenerateResponse enabled="true"/>
+</OAuthV2>
+
+
+execution :
+ 
+-> postman -> post -> body -> x-www-form -> key= grant_type & VALUE =clint_credentials 
+->authorization -> basic auth -> username provided in app as key -> password provided in app as secrete
+
+
+Oauth - Verify
+
+-> create a traget proxy -> preflow -> add Outh -> deploy
+
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<OAuthV2 continueOnError="false" enabled="true" name="OAuth-v20-1">
+    <DisplayName>OAuth v2.0-1</DisplayName>
+    <Properties/>
+    <Attributes/>
+    <Operation>VerifyAccessToken</Operation>
+    <SupportedGrantTypes/>
+    <GenerateResponse enabled="true"/>
+    <Tokens/>
+</OAuthV2>
+
+
+Execution:
+
+->postman -> post url -> key authorization -> value = Bearer access token
