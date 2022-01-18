@@ -1,0 +1,5 @@
+XML TO JSON
+
+-> create new proxy -> set as target link with xml file -> create proxy
+-> pre flow -> responce -> add xml to json policy
+->deloye it
