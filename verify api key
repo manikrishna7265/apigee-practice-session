@@ -1,0 +1,17 @@
+Verify api key
+
+->create api proxy -> pre flow -> request -> add verify api key policy
+
+-> create api products -> create new api and save it 
+
+-> app -> add api product to app
+
+-> postman -> url/proxy?apikey= same as app key value
+
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<VerifyAPIKey continueOnError="false" enabled="true" name="Verify-API-Key-1">
+    <DisplayName>Verify API Key-1</DisplayName>
+    <Properties/>
+    <APIKey ref="request.queryparam.apikey"/>
+</VerifyAPIKey>
+© 2022 GitHub, Inc.
