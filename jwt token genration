@@ -1,0 +1,89 @@
+JWT token
+
+JWT generate tocken
+
+->create one proxy -> preflow -> request ->
+                       -> add assign msg policy 
+                                    <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+                                     <AssignMessage continueOnError="false" enabled="true" name="Assign-Message-1">
+                                     <DisplayName>Assign Message-1</DisplayName>
+                                     <Properties/>
+   					 <AssignVariable>
+    				    <Name>private.key</Name>
+    				    <Value>rak</Value>
+       					 <Ref/>
+ 				 </AssignVariable>
+ 				   <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+  				 <AssignTo createNew="false" transport="http" type="request"/>
+				</AssignMessage>
+
+
+-> add Oauth 2.0 
+        -><?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+	<GenerateJWT continueOnError="false" enabled="true" name="Generate-JWT-1">
+    		<DisplayName>Generate JWT-1</DisplayName>
+    		<Algorithm>HS256</Algorithm>
+    		<SecretKey>
+       		 <Value ref="private.key"/>
+    		</SecretKey>
+   		 <Subject>subject-subject</Subject>
+   		 <Issuer>urn://apigee-edge-JWT-policy-test</Issuer>
+    		<Audience>audience1,audience2</Audience>
+    		<ExpiresIn>8h</ExpiresIn>
+    		<OutputVariable>jwt-variable</OutputVariable>
+		</GenerateJWT>
+
+-> add assign msg 2
+
+		-><?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+		<AssignMessage continueOnError="false" enabled="true" name="Assign-Message-2">
+  		  <DisplayName>Assign Message-2</DisplayName>
+ 		   <Properties/>
+  		  <Add>
+      		  <Headers>
+         		   <Header name="jwt-token">{jwt-variable}
+                </Header>
+       		 </Headers>
+   		 </Add>
+   		 <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+   		 <AssignTo createNew="false" transport="http" type="request"/>
+		</AssignMessage>
+-> deployee it
+
+execution :
+
+->postman -> url/proxy -> send
+
+
+VERIFY TOKEN
+
+-> create proxy -> preflow -> request -> add assign msg policy
+				-><?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+					<AssignMessage continueOnError="false" enabled="true" name="Assign-Message-1">
+    					<DisplayName>Assign Message-1</DisplayName>
+   					 <Properties/>
+    					<AssignVariable>
+        				<Name>private.key</Name>
+       					 <Value>rak</Value>
+        				<Ref/>
+    					</AssignVariable>
+    					<IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+    					<AssignTo createNew="false" transport="http" type="request"/>
+					</AssignMessage>
+
+-> preflow -> request -> add AUTH 2.0
+                          -><?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+				<VerifyJWT continueOnError="false" enabled="true" name="Verify-JWT-1">
+    				<DisplayName>Verify JWT-1</DisplayName>
+   				 <Algorithm>HS256</Algorithm>
+    				<Source>request.header.jwt-token</Source>
+    				<SecretKey>
+        			<Value ref="private.key"/>
+    				</SecretKey>
+    				<Subject>subject-subject</Subject>
+   				 <Issuer>urn://apigee-edge-JWT-policy-test</Issuer>
+    				<Audience>audience1,audience2</Audience>
+				</VerifyJWT>
+->SAVE AND DELPOYEE
+
+EXECUTION :
